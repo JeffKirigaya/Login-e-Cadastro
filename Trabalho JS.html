@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro e Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="mostrarLogin()">
+    <button onclick="irParaCadastro()">Não tem conta? Faça o cadastro agora!</button>
+
+    <form id="cadastroForm" style="display: none;">
+        <h3>Cadastro</h3>
+        <input type="text" placeholder="Nome" id="nome" required>
+        <input type="email" placeholder="Email" id="email" required>
+        <input type="date" placeholder="Data de Nascimento" id="dataNascimento" required>
+        <input type="text" placeholder="Login" id="cadastroLogin" required>
+        <input type="password" placeholder="Senha" id="cadastroSenha" required>
+        <input type="password" placeholder="Confirme a senha" id="confirmarSenha" required>
+        <input type="submit" onclick="cadastrar(); return false" value="Cadastrar">
+    </form>
+    
+    <form id="loginForm" style="display: none;">
+        <h3>Login</h3>
+        <input type="text" placeholder="Login" id="login">
+        <input type="password" placeholder="Senha" id="senha">
+        <input type="submit" onclick="logar(); return false" value="Entrar">
+    </form>
+
+    <script>
+        // Objeto para armazenar os dados de cadastro
+        var usuarios = {};
+
+        function mostrarLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+        }
+
+        function irParaCadastro() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('cadastroForm').style.display = 'block';
+        }
+
+        function cadastrar(){
+            var nome = document.getElementById('nome').value;
+            var email = document.getElementById('email').value;
+            var dataNascimento = document.getElementById('dataNascimento').value;
+            var cadastroLogin = document.getElementById('cadastroLogin').value;
+            var cadastroSenha = document.getElementById('cadastroSenha').value;
+            var confirmarSenha = document.getElementById('confirmarSenha').value;
+
+            // Verifica se todos os campos foram preenchidos
+            if (!nome || !email || !dataNascimento || !cadastroLogin || !cadastroSenha || !confirmarSenha) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // Verifica se a senha e a confirmação de senha são iguais
+            if (cadastroSenha !== confirmarSenha) {
+                alert('A senha e a confirmação de senha não correspondem. Por favor, tente novamente.');
+                return;
+            }
+
+            // Verifica se o login já está cadastrado
+            if (usuarios[cadastroLogin]) {
+                alert('Este login já está em uso. Por favor, escolha outro.');
+                return;
+            }
+            
+            // Armazena os dados de cadastro no objeto "usuarios"
+            usuarios[cadastroLogin] = {
+                nome: nome,
+                email: email,
+                dataNascimento: dataNascimento,
+                senha: cadastroSenha
+            };
+
+            alert('Cadastro realizado com sucesso!');
+            document.getElementById('cadastroForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        }
+
+        function logar(){
+            var login = document.getElementById('login').value;
+            var senha = document.getElementById('senha').value;
+           
+            if (usuarios[login] && usuarios[login].senha === senha) {
+                alert('Sucesso');
+                location.href = "perfil.html";
+            }else{
+                alert('Usuário ou senha incorretos');
+            }
+        }
+    </script> 
